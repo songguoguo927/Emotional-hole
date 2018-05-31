@@ -1,0 +1,299 @@
+ /*  header, section, footer, aside, nav, article, figure
+{ 
+    display: block; 
+}/*在网上看到的，得搜一下用途*/
+body{
+	background-color:#333333; /*整个页面的基底色*/
+}
+.clear{
+	/*left: 185px;*/
+	position: fixed;/*固定作用*/
+	z-index: 9999;/*让导航栏浮在网页的高层位置，遇到flash和图片时候也能始终保持最外层 */
+	top: 0px;
+	background: #000000;
+	/*position: relative;*/}
+#xjm h1{
+	color: white;
+	font-family: "Microsoft YaHei";
+	/*background: #666600;*/
+    width: 80px;
+    float: left;
+    text-align: center;}
+#xjm{
+	padding-left: 20px;}
+#nav{
+	width:1520px;
+	/*height: 80px;
+	padding-right: 50px;
+	/*margin-top: 30px;/*与浏览器顶部的距离30px*/}
+#nav a{
+	font-weight: bold;/*加粗*/
+	font-size: 20px;
+	text-decoration: none;/*删除链接下划线*/
+	font-family: "Microsoft YaHei";
+	float: right;
+	width: 100px;
+	list-style:none;
+	/*background-color: #592059;/*盒子色*/
+	line-height: 80px;}
+#nav a:hover{
+	color:#fff;
+	font-size: 25px; }
+#img1{
+	height: 800px;
+	width: 1400px;
+	background: url(img2/359H.jpg) no-repeat;
+	background-size: 1400px 800px;
+	margin:0 auto;}
+.p{
+	font-size: 100px;
+	font-family: "chiller";
+	margin:0;
+	color: #fff;/*白色*/
+	padding-top: 100px;
+	padding-left: 50px;
+	width: 800px;
+	/*background-color: #3f9; /*盒子颜色*/}
+#part2{
+/*height: 100px;*/
+width:1420px;
+margin:0 auto;/*margin-top: 200px;*/}
+#section0{
+	text-align: center;
+	font-size: 50px;
+	color: #fff;
+	width:1400px;
+	height:200px;
+	/*background: #ffffff;盒子色*/
+	margin: 0 auto;
+	padding-top: 20px;
+	font-family: "Vladimir Script";}
+#box1{
+	width: 1400px;
+	height: 680px;
+	/*background-color: #f66;粉橘色*/
+	margin: 0 auto;}
+#box2{
+	height: 580px;
+	width:620px;
+	background-color: #fff;
+	padding: 50px;
+	float: left;
+	border-radius:25px;}
+#img2{
+	/*display: inline-block;*/
+	/*margin-top: 0px;*/
+	background: url(img2/duola.jpg) no-repeat;
+	background-size: 280px 270px;
+	/*margin: 0 auto;/*水平居中*/
+	/*background-color: #ffcc66;黄色背景*/
+	width: 280px;
+	height: 270px;
+	float:left;
+	border-radius:25px;}
+#img3{
+	float: right;
+	/*padding-top: 30px;
+	/*上边框留空白,字距上边框30px .设置后发现版块与板块间的隔缝没了*/
+	height: 270px;
+	background:url(img2/cat.jpg); 
+	background-size: 280px 270px;
+	width: 280px;
+	/*margin: 0 auto;/*水平居中*/
+	display: inline-block;
+     border-radius:25px;}
+#img4{
+	float: left;
+	border-radius:25px;
+	width: 280px;
+	height: 270px;
+	/*margin:0 auto;/*整个版块水平居中*/ 
+	background:url(img2/list.jpg) no-repeat;
+	background-size: 280px 270px;
+	display: inline-block;}
+#img5{
+	border-radius:25px;
+	background: url(img2/milktea.jpg) no-repeat;/*页面的背景图显示不出来？*/
+	background-size: 280px 270px;
+	float: right;
+	width: 280px;
+	height: 270px;
+	background-color: #000000;
+	/*原因在这，应为background-color而不是background*/
+	display: inline-block;
+	color:#ffffff;
+	/*margin:0 auto;*/}	
+#box3{
+	background:#fff;
+	float: right;
+	width: 680px;
+	height: 630px;
+	border-radius:25px;
+	padding-top: 50px;}
+#text1{
+	box-shadow: 10px 10px 5px #888;
+	width: 600px;
+	height: 500px;
+	background: #fc6;
+	font-family: "幼圆";
+	margin: 0 auto;
+	line-height: 35px;
+	padding:25px;
+	border-radius:25px;}
+#part3{
+	width:1400px;
+	height:920px;
+	margin: 0 auto;}
+#section1{
+	text-align: center;
+	font-size: 50px;
+	color: #fff;
+	width:1400px;
+	height:200px;
+	/*background: #ffffff;盒子色*/
+	margin: 0 auto;
+	padding-top: 20px;
+	font-family: "Vladimir Script";}
+#section2{
+	padding-top: 50px;
+	width:695px;
+	height: 675px;
+	background-color: #fff;
+	float: left;
+	border-radius:25px;
+	border-color: #fff;}
+#text2{
+	box-shadow: 10px 10px 5px #333;
+	width: 600px;
+	height: 570px;
+	background: #363;
+	font-family: "幼圆";
+	margin: 0 auto;
+	line-height: 35px;
+	padding:25px;
+	border-radius:25px;
+	color: #999;}
+#section3{
+	width:655px;
+	height: 675px;
+	/*background-color: #fff;*/
+	float: right;
+    border-radius:25px;
+    padding: 25px;}
+#img6{
+	float: left;
+	background:url(img2/songs0.jpg); 
+	background-size: 310px 620px;
+	width: 310px;
+	height: 620px;}
+#img7{
+	float: right;
+    background:url(img2/songs1.jpg); 
+	background-size: 310px 620px;
+	width: 310px;
+	height: 620px;}
+#section{
+	width:655px;
+	height:50px;
+	/*background-color: #363;*/
+    float: right;}
+#section p{
+	color: #fff;
+	 font-family: "幼圆";
+	 float: right;}
+#part4{
+	width:1400px;
+	height:900px;
+	margin: 0 auto;}
+#section4{
+	text-align: center;
+	font-size: 50px;
+	color: #fff;
+	width:1400px;
+	height:200px;
+	/*background: #ffffff;盒子色*/
+	margin: 0 auto;
+	padding-top: 20px;
+	font-family: "Vladimir Script";}
+#section5{
+	border-radius:25px;
+	width:1000px;
+	height: 659px;
+	background-color: #363;/*盒子的*/
+	box-shadow:10px 10px 5px #000; 
+	/*background: url(img2/timg.jpg) no-repeat;
+	background-size: 1000px 659px;*/
+	margin: 0 auto;}
+#section5 h1{
+	padding-top: 20px;
+	font-family: "幼圆";
+    font-size: 30px;
+    color: #000;
+    text-align: center;}
+#section5 p{
+	font-family: "幼圆";
+	color: #000;
+	text-align: center;}
+ .part4Input
+{
+	height:406px;
+	width:595px;
+	display: inline-block;
+	margin-top: 40px;
+	margin-left: 200px;}
+.part4Input div
+{
+	height:47px;
+	margin-bottom: 20px;}
+.part4Input div input
+{
+	/*background-color: transparent;/*边框透明*/
+	background-color: #ccc;
+	color: #000;
+	font-family: "幼圆";
+	margin-top:0;
+	height:47px;
+	width:278px;
+	border:none;
+	padding-left:10px;}
+.part4Input form div textarea
+{
+	overflow:hidden;/*可以取消上下和左右滚动条；*/
+	/*background-color: transparent;*/
+	background-color: #ccc;
+	color: #000;
+	font-family: "幼圆";
+	padding-top: 10px;
+	padding-left:10px;
+	height:160px;
+	width:584px;
+	border:none;}
+.part4input #Inputleft
+{
+	float:left;}
+.part4Input #Inputright
+{
+	float:right;}
+.part4Input #Submit
+{
+	font-family: "黑体";
+	height:50px;
+	float: right;} 	
+#footer{
+	width: 1520px;
+	/*height: 80px;
+	/*margin:0 auto;*/
+	background:#000000 ;
+	padding-top: 20px;}
+#inner p{
+	color: white;
+	text-align: center;
+	font-family: "Microsoft YaHei";
+	font-weight: bold;
+	font-size: 15px;
+	padding-top: 8px;	}
+#inner{
+	width: 300px;
+	height: 40px;
+	/*background: #666600;*/
+	margin: 0 auto;}	
