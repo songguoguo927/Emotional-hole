@@ -3,36 +3,27 @@ body{
     background-color: #fff;
   }
   header{
-  	
-    text-align: center;
+   background-color: #337ab7;
+    margin-bottom: 45px;
+    color:white;
   	font-size: 1.8em;
     padding: 70px;
-   
+    border-radius: 10px; 
   }
   a{
-    
+    color: white;
     font-size: 16px;
   }
   a:hover{
     text-decoration: none;
   }
   
-  button{
-    margin-left: 16%;
-    margin-bottom: 10px;
-    background-color: white;
-    width: 72px;
-    height: 50px;
-    border-radius: 50px;
-    font-size: 20px;
-    border: white;
-  }
+  
   h1,footer{
   	text-align: center;
   	font-size: 1.8em;
   } 
   p{ 
-     /*font-family: IlV;*/
     margin: 20px;
     font-family: "微软雅黑";
    }
@@ -44,7 +35,7 @@ body{
   	width: 25px;
   }
   #moodCard{
-  	/*width: 80%;*/
+  	
     float: right;
   }
   #dailyMood {
@@ -75,27 +66,33 @@ body{
   float: left;
 }
 footer{
+  margin-top: 20px;
   background-color: #333;
-  color: #000;
+  color: #fff;
   font-size: 16px;
+  height: 100px;
 }
-
+footer a{
+  display: block;
+  padding: 20px;
+}
 .nav{
-  float: left;
+  float: right;
 }
 /* Tooltip 容器 */
-.tooltip {
+.tip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black; /* 悬停元素上显示点线 */
+    /*border-bottom: 1px dotted black;  悬停元素上显示点线 */
 }
  
 /* Tooltip 文本 */
-.tooltip .tooltiptext {
+.tip .tiptext {
+   font-size: 0.5em;
     visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
+    width: 100px;
+    background-color:white;
+    color: #000;
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
@@ -106,6 +103,16 @@ footer{
 }
  
 /* 鼠标移动上去后显示提示框 */
-.tooltip:hover .tooltiptext {
+.tip:hover .tiptext {
     visibility: visible;
+}
+.tip .tiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* 提示工具头部 */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
 }

@@ -9,39 +9,38 @@
 <script type="text/javascript" src="js/dynamicTitle.js"></script>
 <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/fun.css">
+<link media="(max-width: 768px)" href="css/mobile.css" rel="stylesheet">
 </head>
 <body>
 <header>
-
+ <img src="images/Pin.png" class="icon_img"><label>emotion hole</label>
   <div  class="nav">
-    <a href="https://xiajm.me">
-     <img src="images/home.png" class="home_img icon_img">home
-     <div class="tooltip">
-        <span class="tooltiptext">点我回到主页</span>
+    
+     
+     <div class="tip"><img src="images/home.png" class="home_img icon_img"><a href="https://xiajm.me">Home</a>
+        <span class="tiptext">click me back</span>
      </div>
-    </a>
- </div>
-  <img src="images/Pin.png" class="icon_img">emotion hole
-  
+    
+ </div>  
 </header>
 <div class="container">
   <div class="row">
-    <div  id="sidebar" class="sidebar-offcanvas col-md-2 col-xs-12">
+    <div  id="sidebar" class="sidebar-offcanvas col-lg-2 col-md-2 col-xs-12">
            <img src="images/灯.png" class="icon_img">佛系更新
           <div class="list-group">
-            <a href="#" class="list-group-item active">日推书籍</a>
-            <a href="#" class="list-group-item">日推电影</a>
+            <a href="#" class="list-group-item active">日推</a>
+            <a href="#" class="list-group-item">电影-《她》</a>
             <a href="#" class="list-group-item">日推音乐</a>
-            <a href="#" class="list-group-item">日推综艺</a>
+            <a href="#" class="list-group-item">综艺-《奇葩说》</a>
             <a href="#" class="list-group-item">日推美食</a>
-            <a href="#" class="list-group-item">...</a>
+            <a href="#" class="list-group-item">日推书籍</a>
             <a href="#" class="list-group-item">芝士力量</a>
             <a href="#" class="list-group-item">听不腻</a>
             <a href="#" class="list-group-item">影荒N刷</a>
             <a href="#" class="list-group-item">fun</a>
           </div>
     </div>
-    <div id="moodCard" class="masonry col-md-10">
+    <div id="moodCard" class="masonry col-lg-10 col-md-10 col-xs-12">
                 <div class="item FirstDay" id="dailyMood">
                   <div class="item__content">
                       <h1>first day</h1>
@@ -164,7 +163,25 @@
             
       </div>
 </div> <!--/.row-->
-    <footer>逢凉野性-Do some fun things</footer> 
+  <div class="comments">
+    <label for="commentsContent">want to say something to me:</label>
+    <textarea id="commentsContent" class="form-control" rows="3"></textarea>
+    <form class="form-inline">
+      <div class="form-group">
+      
+      <label for="Name">Name</label>
+      <input type="text" class="form-control" id="Name" placeholder="Jane Doe">
+      </div>
+      <div class="form-group">
+      <label for="Email">Email</label>
+      <input type="email" class="form-control" id="Email" placeholder="jane.doe@example.com">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+    
+  
+  </div>
+    <footer><a>逢凉野性-Do some fun things</a></footer> 
  </div><!--/.container-->
 
 <body>
