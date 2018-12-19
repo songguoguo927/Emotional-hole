@@ -1,26 +1,32 @@
- /*  header, section, footer, aside, nav, article, figure
-{ 
-    display: block; 
-}/*在网上看到的，得搜一下用途*/
+
 body{
 	background-color:#333333; /*整个页面的基底色*/
 }
+@font-face {
+font-family:Vladimir;
+src: url('../font/VLADIMIR.TTF');
+}
+@font-face {
+font-family:chiller;
+src: url('../font/CHILLER.TTF');
+}
+
 .clear{
-	/*left: 185px;*/
 	position: fixed;/*固定作用*/
 	z-index: 9999;/*让导航栏浮在网页的高层位置，遇到flash和图片时候也能始终保持最外层 */
 	top: 0px;
 	background: #000000;
-	/*position: relative;*/}
+	}
 #xjm h1{
 	color: white;
 	font-family: "Microsoft YaHei";
-	/*background: #666600;*/
     width: 80px;
     float: left;
-    text-align: center;}
+    text-align: center;
+	}
 #xjm{
-	padding-left: 20px;}
+	padding-left: 20px;
+	}
 #nav{
 	width:1520px;
 	/*height: 80px;
@@ -67,7 +73,7 @@ margin:0 auto;/*margin-top: 200px;*/}
 	/*background: #ffffff;盒子色*/
 	margin: 0 auto;
 	padding-top: 20px;
-	font-family: "Vladimir Script";}
+	font-family: "Vladimir";}
 #box1{
 	width: 1400px;
 	height: 680px;
@@ -153,7 +159,7 @@ margin:0 auto;/*margin-top: 200px;*/}
 	/*background: #ffffff;盒子色*/
 	margin: 0 auto;
 	padding-top: 20px;
-	font-family: "Vladimir Script";}
+	font-family: "Vladimir";}
 #section2{
 	padding-top: 50px;
 	width:695px;
@@ -214,7 +220,7 @@ margin:0 auto;/*margin-top: 200px;*/}
 	/*background: #ffffff;盒子色*/
 	margin: 0 auto;
 	padding-top: 20px;
-	font-family: "Vladimir Script";}
+	font-family: "Vladimir";}
 #section5{
 	border-radius:25px;
 	width:1000px;
@@ -280,11 +286,9 @@ margin:0 auto;/*margin-top: 200px;*/}
 	height:50px;
 	float: right;} 	
 #footer{
-	width: 1520px;
-	/*height: 80px;
-	/*margin:0 auto;*/
 	background:#000000 ;
-	padding-top: 20px;}
+	padding-top: 20px;
+	}
 #inner p{
 	color: white;
 	text-align: center;
