@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>3、完整的游戏</title>
+    
+    <style>
+      body {
+        font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB",
+          "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+          min-width: 400px;
+      }
+      ul,li{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      li::before{
+        content: '*';
+        color: #096;
+        vertical-align: middle;
+        margin-right: 15px;
+        font-weight: bolder;
+      }
+      canvas {
+        margin: 20px auto 0;
+        display: block;
+        background: rebeccapurple;
+      }
+
+      form {
+       text-align: center;
+        line-height: 30px;       
+        margin: 20px;
+      }
+      
+      input {
+        width: 150px;
+        height: 30px;
+        border: none;
+        margin-left: 20px;
+        background: transparent;
+      }
+      .rule,
+      .controlArea {
+        width: calc(100vmin - 20px);
+        margin: 0 auto;
+      }
+      .controlArea {
+        background: linear-gradient(
+            135deg,
+            transparent 0,
+            transparent 49.5%,
+            rgb(75, 163, 75) 49.5%,
+            rgb(75, 163, 75) 50.5%,
+            transparent 50.5%,
+            transparent 100%
+          ),
+          linear-gradient(
+            45deg,
+            transparent 0,
+            transparent 49.5%,
+            rgb(228, 75, 75) 49.5%,
+            rgb(228, 75, 75) 50.5%,
+            transparent 50.5%,
+            transparent 100%
+          );
+        background-size: 30px 30px;
+        padding: 13px 0px;
+      }
+      .default_btn {
+        margin: 0 auto;
+        display: block;
+        width: 150px;
+        height: 31px;
+        background: #096;
+        color: white;
+        border: none;
+        border-radius: 5%;
+      }
+      p {
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rule">
+      <h4>游戏《两个骰子的数字之和》---规则</h4>
+      <ul>
+        <li>如果玩家第一次抛出7或11（两个骰子点数和），那么他就获胜。如果玩家抛出2、3或12，那么他就输了。抛出其他结果（4,5, 6, 8, 9,10），
+        则会记录为玩家的点数，然后需要继续掷骰子。</li>
+        
+        <li>后面再抛出7就输了，而如果正好抛出玩家的点数则获胜（即两次点数相同）。其他情况游戏继续，并遵循上面的规则。</li>
+        <li>初始金额100，玩一次扣10，赢一次加20</li>
+      </ul>
+      
+    </div>
+    <canvas id="canvas" width="400" height="300">你的浏览器不支持canvas</canvas>
+    <br />
+    <div class="controlArea">
+      <button onclick="throwdice()" class="default_btn">掷骰子</button>
+      <!-- 表单域用于输出 -->
+      <form name="f" onsubmit="throwdice()" autocomplete="off">
+        状态:<input name="stage" value="First Throw" /> <br />点数:<input
+          name="pv"
+          value=" "
+        />
+        <br />余额:<input
+          name="bank"
+          value="100"
+        /><br />
+        游戏提示:<input name="outcome" value="  " /> 
+      </form>
+    </div>
+    <script>
+        /**保存画布的宽高，骰子的水平，垂直位置，及骰子面的宽高*/
+        var cwidth = 400,
+          cheight = 300,
+          dicex = 80,
+          dicey = 90,
+          dicewidth = 100,
+          diceheight = 100;
+        //圆点的半径
+        var dotrad = 6;
+        var ctx;
+        var dx, dy; //用于水平/垂直定位的变量，两个骰子面的水平位置不同//垂直位置相同
+  
+        var firstturn = true;
+        var point;
+  
+        function throwdice() {
+          var sum;
+          var ch = 1 + Math.floor(Math.random() * 6);
+          sum = ch;
+          dx = dicex; //设置第一个骰子面水平位置
+          dy = dicey; //设置第一，二个骰子面垂直位置
+          drawface(ch);
+  
+          dx = dicex + 150; //第二个
+          ch = 1 + Math.floor(Math.random() * 6);
+          sum += ch;
+          drawface(ch);
+          /***--增加金额功能玩法-*/
+          var bank = Number(document.f.bank.value);
+          if (bank < 10) {
+            alert("You ran out of money!Add some more and try again.");
+            return;
+          }
+          bank = bank - 10;
+          document.f.bank.value = String(bank);
+          /***---*/
+          if (firstturn) {
+            switch (sum) {
+              case 7:
+              case 11:
+                document.f.outcome.value = "You win!";
+                /**玩家赢得部分加下列三行代码*/
+                bank = Number(document.f.bank.value);
+                bank += 20;
+                document.f.bank.value = String(bank);
+  
+                break;
+              case 2:
+              case 3:
+              case 12:
+                document.f.outcome.value = "You lose!";
+                break;
+              default:
+                point = sum;
+                document.f.pv.value = point;
+                firstturn = false;
+                document.f.stage.value = "Need follow-up throw.";
+                document.f.outcome.value = " ";
+            }
+          } else {
+            switch (sum) {
+              case point:
+                document.f.outcome.value = "You win!";
+                /**玩家赢得部分加下列三行代码*/
+                bank = Number(document.f.bank.value);
+                bank += 20;
+                document.f.bank.value = String(bank);
+                document.f.stage.value = "Back to first throw.";
+                document.f.pv.value = " ";
+                firstturn = true;
+                break;
+              case 7:
+                document.f.outcome.value = "You lose!";
+                document.f.stage.value = "Back to first throw.";
+                document.f.pv.value = " ";
+                firstturn = true;
+            }
+          }
+        }
+        function drawface(n) {
+          ctx = document.getElementById("canvas").getContext("2d");
+          ctx.lineWidth = 5;
+          ctx.strokeStyle = "#eee";
+          ctx.clearRect(dx, dy, dicewidth, diceheight); //清除圆来绘制骰子面的空间，第一次调用不会产生任何影响
+          ctx.strokeRect(dx, dy, dicewidth, diceheight); //画出骰子面轮廓（边框）
+  
+          var dotx, doty; //保存水平/垂直位置的变量
+          ctx.fillStyle = "#096"; //点的颜色
+          switch (n) {
+            case 1:
+              draw1();
+              break;
+            case 2:
+              draw2();
+              break;
+            case 3:
+              draw2();
+              draw1();
+              break;
+            case 4:
+              draw4();
+              break;
+            case 5:
+              draw4();
+              draw1();
+              break;
+            case 6:
+              draw4();
+              draw2mid();
+              break;
+          }
+        }
+        function draw1() {
+          var dotx, doty;
+          ctx.beginPath();
+          /*设置这个圆点的中心在骰子面正中间(水平方向的中心和垂直方向的中心)*/
+          dotx = dx + 0.5 * dicewidth;
+          doty = dy + 0.5 * dicewidth;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          ctx.closePath();
+          ctx.fill();
+        }
+        function draw2() {
+          var dotx, doty;
+          ctx.beginPath();
+          /*设置这个圆点的中心在水平方向上与骰子面左上角相距3个半径*/
+          /*设置这个圆点的中心在垂直方向上与骰子面左上角相距3个半径*/
+  
+          dotx = dx + 3 * dotrad;
+          doty = dy + 3 * dotrad;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          /*设置这个圆点的中心在水平方向上与骰子面右下角相距3个半径*/
+          /*设置这个圆点的中心在垂直方向上与骰子面右下角相距3个半径*/
+          dotx = dx + dicewidth - 3 * dotrad;
+          doty = dy + diceheight - 3 * dotrad;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          ctx.closePath();
+          ctx.fill();
+        }
+        function draw4() {
+          var dotx, doty;
+          ctx.beginPath();
+          /*设置这个圆点的中心在水平方向上与骰子面左上角相距3个半径*/
+          /*设置这个圆点的中心在垂直方向上与骰子面左上角相距3个半径*/
+  
+          dotx = dx + 3 * dotrad;
+          doty = dy + 3 * dotrad;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          /*设置这个圆点的中心在水平方向上与骰子面右下角相距3个半径*/
+          /*设置这个圆点的中心在垂直方向上与骰子面右下角相距3个半径*/
+          dotx = dx + dicewidth - 3 * dotrad;
+          doty = dy + diceheight - 3 * dotrad;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          ctx.closePath();
+          ctx.fill();
+  
+          ctx.beginPath();
+          /*水平方向上将这个圆点定位在左下角*/
+          /*垂直方向上将这个圆点定位在左下角*/
+  
+          dotx = dx + 3 * dotrad;
+          doty = dy + diceheight - 3 * dotrad;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          /*水平方向上将这个圆点定位在右上角*/
+          /*垂直方向上将这个圆点定位在右上角*/
+          dotx = dx + dicewidth - 3 * dotrad;
+          doty = dy + 3 * dotrad;
+  
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          ctx.closePath();
+          ctx.fill();
+        }
+        function draw2mid() {
+          var dotx, doty;
+          ctx.beginPath();
+          /*设置这个圆点水平方向上位于左边*/
+          /*设置这个圆点垂直方向上在骰子面中间*/
+  
+          dotx = dx + 3 * dotrad;
+          doty = dy + 0.5 * diceheight;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          /*设置这个圆点水平方向上位于右边*/
+          /*设置这个圆点垂直方向上在骰子面中间*/
+          dotx = dx + dicewidth - 3 * dotrad;
+          doty = dy + 0.5 * diceheight;
+          ctx.arc(dotx, doty, dotrad, 0, Math.PI * 2, true);
+          ctx.closePath();
+          ctx.fill();
+        }
+      </script>
+  </body>
+</html>

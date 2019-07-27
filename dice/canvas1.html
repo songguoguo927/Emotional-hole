@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>画布1-矩形及弧线绘制</title>
+    <script>
+      function init() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        //绘制矩形 fill开头是对内容，stroke是对边框
+        // ctx.fillStyle = "red"; //fillStyle设置填充颜色
+        // ctx.strokeStyle = "hsl(130,50%,50%)"; //strokeStyle设置边框颜色
+        // ctx.lineWidth = 3; //lineWidth设置图形边框的宽度
+        // ctx.fillRect(50, 50, 100, 100);
+        // ctx.strokeRect(50, 50, 100, 100);
+
+        //弧线
+        ctx.beginPath();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "green";
+        ctx.fillStyle = "red"
+        //圆心水平垂直坐标，半径，起始角度，结束角度--》2π为360°;方向，false顺时针（H5规定）
+        //弧的圆形的三点钟位置是 0 度
+        ctx.arc(200, 200, 50, 0,Math.PI, false); //笑脸false or皱眉true
+        /**
+        三种方式画圆，一样
+        ctx.arc(200, 200, 50, 0,2*Math.PI, false); 
+        ctx.arc(200, 200, 50, 0,2*Math.PI, true); 
+        ctx.arc(200, 200, 50, .5*Math.PI,2.5*Math.PI, true); 
+
+
+        */
+        //调换下两行代码，直接会导致一个是半圆，一个是圆弧
+        // ctx.closePath();
+        ctx.stroke();
+        // ctx.closePath(); 放在最后可不加，不加的话效果也一样，并不一定要使用closePath命令，不过包括这个命令是一个很好的实践做法
+       //在stroke之前加入结束这个路径的语句ctx.closePath();，会生成‘闭合’的弧线
+        ctx.fill() //如果希望填充这个路径，可以使用这个取代上面的ctx.stroke(),这会生成一个黑色的填充形状
+        //如果希望填充一个形状，且有一个突出的轮廓，可以同时使用fill和stroke命令，结合fillStyle和strokeStyle属性指定不同的颜色
+      }
+    </script>
+  </head>
+  <body onload="init();">
+    <!-- （1）放置canvas元素首先需要指定ID，widht，height三个属性，其中宽度跟高度只能通过这种方式指定，不可以通过css样式指定 -->
+    <!-- canvas标签里面的内容只有当浏览器不兼容canvas时，才会显示，当浏览器兼容canvas时，该内容将不显示，只显示绘制的内容 -->
+    <canvas id="canvas" width="400" height="300">你的浏览器不支持canvas</canvas>
+  </body>
+</html>
+  <!-- ctx.clearRect(x,y,width,height) 擦除画布-->
