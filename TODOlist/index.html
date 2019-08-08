@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>todolist</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      #app {
+        width: calc(100vmin - 20px);
+        border: 1px solid #ccc;
+        margin: 0 auto;
+      }
+      ul {
+        width: 80%;
+        margin: 0 auto;
+      }
+      li {
+        list-style: none;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ccc;
+      }
+      ul li:last-child() {
+        border-bottom: none;
+      }
+      i {
+        cursor: pointer;
+      }
+      h3 {
+        font-weight: 400;
+        padding: 10px;
+      }
+      .text-right {
+        display: block;
+        float: right;
+      }
+      .delete {
+        text-decoration: line-through;
+        opacity: 0.3;
+        transition: opacity 1s;
+      }
+
+      .todo-main {
+        margin: 10px;
+      }
+      .todoItem {
+        margin: 0 20px;
+      }
+      .todo-add input {
+        height: 45px;
+        width: 80%;
+        display: block;
+        margin: 20px auto;
+        margin-top: 40px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        text-indent: 10%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h3>Todo</h3>
+      <div class="todo-main">
+        <ul></ul>
+      </div>
+      <div class="todo-add">
+        <input
+          type="text"
+          placeholder="write new and hit Enter"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <script>
+      //根据数据渲染html
+      window.onload = function() {
+        var oUl = document.querySelector("ul");
+        var addInput = document.querySelector(".todo-add input");
+
+        //从indexDB中获取tododata数据，并渲染
+        function getAll() {
+          getConnection(function(db) {
+            var ts = db.transaction(["todoItem"], "readwrite");
+            var store = ts.objectStore("todoItem");
+            var req = store.getAll();
+            req.onsuccess = function() {
+              // console.log(this.result)
+              bindHtml(this.result);
+            };
+          });
+        }
+        getAll();
+        function bindHtml(todoData) {
+          //渲染的时候注意，为1的现在就加上delete的class名
+          var str = "";
+          todoData.forEach(function(item) {
+            if(item.status==0){
+              str += `<li><label><input type="checkbox" value="${item.id}">
+      		  <span class="todoItem" data-status="${item.status}">${item.todoName}</span></label>
+      		  <i class="text-right">&times;</i></li>`;
+            }
+            
+            //所以考虑到下面点击i时当已经有delete类名的，就可以直接return
+            // 将status状态为0的放在前面，为1的放在后面，如何实现？--两次遍历即可解决
+          });
+          todoData.forEach(function(item){
+            if(item.status==1){
+              str += `<li><label><input type="checkbox" value="${item.id}" checked>
+      		  <span class="todoItem delete" data-status="${item.status}">${item.todoName}</span></label>
+      		  <i class="text-right">&times;</i></li>`
+            }
+          })
+          oUl.innerHTML = str;
+        }
+        oUl.onclick = function(e) {
+          // console.log(e.target.parentNode)
+         
+          if (e.target.tagName === "I") { 
+            var span = e.target.previousElementSibling.lastChild;
+            var checkbox = e.target.previousElementSibling.firstChild;          
+            if(checkbox.checked == "true"){
+              return;
+            }
+            span.className += " delete";
+            checkbox.checked = "true";
+            //要求点击删除 同时更改indexDB中对应条目的status为1--已完成
+            //1，获取要假删除的值的id
+            // console.log(checkbox.value)
+            var obj = {
+              id:+checkbox.value,
+              todoName:span.innerText,
+              status:1
+            }
+            saveSingle(obj)
+          }
+          if (e.target.tagName === "INPUT") {
+            var span = e.target.parentNode.lastChild;
+            var checkbox = e.target;
+            console.log(checkbox.value)
+            if(!checkbox.checked){//很关键
+              // console.log(11111)
+              span.className += "todoItem";
+              var obj = {
+              id:+checkbox.value,
+              todoName:span.innerText,
+              status:0
+            }
+            saveSingle(obj)
+            }
+            //当处于status=1的时候，点击input的效果要和点击x一样
+            if(checkbox.checked){
+              span.className += " delete";
+              var obj = {
+              id:+checkbox.value,
+              todoName:span.innerText,
+              status:1
+            }
+            saveSingle(obj)
+            }
+          }
+        };
+        //在input框输入内容 按下回车键 数据增加一条 并页面刷新增加记录显示
+        addInput.onkeyup = function(e) {
+          // console.log(e.keyCode)
+          if (e.keyCode === 13) {
+            var newTodo = {
+              todoName: e.target.value,
+              status: 0
+            };
+            e.target.value = null;
+            saveSingle(newTodo);
+            // todoData.push(newTodo);
+            window.location.reload();
+          }
+        };
+      };
+      function getConnection(handler) {
+        var request = indexedDB.open("todolist");
+        console.log(request);
+
+        request.onerror = function(e) {
+          console.log("Open Error!", e);
+        };
+        request.onsuccess = function(e) {
+          db = e.target.result;
+          handler(db);
+        };
+        request.onupgradeneeded = function(e) {
+          var oldVersion = e.oldVersion;
+          var newVersion = e.newVersion;
+          console.log(
+            "数据库版本更新成功！旧版本为" +
+              oldVersion +
+              ",新版本为" +
+              newVersion
+          );
+          //删除原有的数据仓库，创建新的数据仓库
+          var db = e.target.result;
+          if (db.objectStoreNames.contains("todoItem")) {
+            db.deleteObjectStore("todoItem");
+          }
+          //创建数据仓库
+          var store = db.createObjectStore("todoItem", {
+            keyPath: "id",
+            autoIncrement: true
+          });
+        };
+      }
+      function saveSingle(obj) {
+        getConnection(function(db) {
+          var ts = db.transaction(["todoItem"], "readwrite");
+          var store = ts.objectStore("todoItem");
+          var req = store.put(obj);
+          req.onsuccess = function() {
+            console.log("save success");
+          };
+        });
+      }
+      
+      
+    </script>
+  </body>
+</html>
