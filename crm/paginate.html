@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>ajax分页</title>
+    <link rel="stylesheet" href="./css/index.css" />
+    <script src="./js/jam-ajax.js"></script>
+    <style>
+     .box {
+        width: 1000px;
+        overflow: hidden;
+      }
+      #page {
+        float: right;
+        margin-top: 20px;
+      }
+      #page ul,
+      li {
+        display: inline-block;
+      }
+      #page span,
+      #page li {
+        border: 1px solid rebeccapurple;
+      }
+      #page span:hover,
+      #page li:hover {
+        background: rebeccapurple;
+        color: white;
+        cursor: pointer;
+      }
+      #page li.bg {
+        background: rebeccapurple;
+        color: white;
+      }
+      #numInput {
+        display: inline-block;
+        width: 15px;
+      }
+      .w100 {
+        width: 200px;
+      }
+      #pageNum li{
+        margin: 5px;
+        width:15px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <a href="add.html" class="link add">增加数据</a>
+      <a href="javascript:;" class="link batchDelBtn">批量删除</a>
+      <h2 class="head">
+        <span class="w50">checkbox</span>
+        <span class="w100">编号</span>
+        <span class="w100">姓名</span>
+        <span class="w100">性别</span>
+        <span class="w100">分数</span>
+        <span class="w150">操作</span>
+      </h2>
+      <ul class="list" id="list">
+        <!-- <li>
+          <span class="w100">1</span>
+          <span class="w100">小花</span>
+          <span class="w100">1</span>
+          <span class="w100">96</span>
+        </li> -->
+      </ul>
+      <div id="page">
+        <span>第一页</span>
+        <span>上一页</span>
+        <ul id="pageNum">
+          <!-- <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li> -->
+        </ul>
+        <span>下一页</span>
+        <span>最后一页</span>
+        <input type="text" id="numInput" value="1" />
+      </div>
+    </div>
+    <script>
+      var pageModule = (function() {
+        var oUl = document.getElementById("list"),
+          page = document.getElementById("page"),
+          pageNum = document.getElementById("pageNum"),
+          batchDelBtn = document.querySelector('.batchDelBtn'),
+          numInput = document.getElementById("numInput");
+        var n = 1,
+          total = 0,data=null;
+        
+        //拿到数据，实现数据绑定，渲染页面
+        function bindHTML() {
+          var str = "";
+          for (var i = 0; i < data.length; i++) {
+            var curData = data[i];
+            str += `
+        <li studentId="${curData["id"]}">
+          <span class="w50"><input type="checkbox" value="${curData["id"]}"/></span>
+          <span class="w100">${curData["id"]}</span>
+          <span class="w100">${curData["name"]}</span>
+          <span class="w100">${curData["sex"]}</span>
+          <span class="w100">${curData["score"]}</span>  
+          <span class="w150 control">
+            <a href="add.html?id=${curData["id"]}">修改</a>
+            <a href="javascript:;" stuId="${curData["id"]}">删除</a>
+          </span> 
+        </li>`;
+          }
+          oUl.innerHTML = str;
+          //pageNum bindHTML
+          str = ""
+          for(i=1;i<=total;i++){
+            if(i===n){
+              str+=`<li class="bg">${i}</li>`
+            continue;
+            }
+            str+=`<li>${i}</li>`
+          }
+          pageNum.innerHTML = str;
+          //numInput bind
+          numInput.value = n
+        }
+        function bindEvent() {
+          //事件委托，查看具体信息  实现分页区域的按钮操作&&给文本框的enter绑定事件
+          page.onclick = function(e) {
+            e = e || window.event;
+            var tar = e.target || e.srcElement,
+              tarTag = tar.tagName.toUpperCase();
+              tarInn = tar.innerHTML;
+              //判断事件源  TODO
+              //上一页 下一页 第一页 最后一页
+            if (tarTag === "SPAN") {
+              if(tarInn ==="第一页"){
+                if(n===1){
+                  return;
+                }
+                n=1;
+              }
+              if(tarInn ==="最后一页"){
+                if(n===total){
+                  return;
+                }
+                n=total;
+              }
+              if(tarInn ==="上一页"){
+                if(n===1){
+                  return;
+                }
+                n--;
+              }
+              if(tarInn ==="下一页"){
+                if(n===total){
+                  return;
+                }
+                n++;
+              }              
+            }
+
+            //LI
+            if(tarTag ==="LI"){
+              if(n===parseFloat(tarInn)){
+                return;
+              }
+              n=parseFloat(tarInn);
+            }
+
+            if(tarTag==="INPUT"){
+              return;
+            }
+
+          //目前不管点击谁都获取到了最新的n值，然后重新发送请求
+          sendAJAX();            
+          };
+        
+          numInput.onkeyup = function(e){
+            // console.log('111111')
+              e=e||window.event;
+              if(e.keyCode === 13){
+                //正则去除空格，以空格开头或结尾的用空代替
+                var val = this.value.replace(/^ +| +$/,"")
+                // console.log(val)
+                if(isNaN(val)){
+                //非有效数字不操作
+                this.value = n;
+                return;
+              }
+              val=Math.round(val);//四舍五入
+              if(val<1) {n=1;}
+              else if(val>total){
+                n=total;
+              } else{
+                n=val;
+              }
+              sendAJAX();
+              }
+              
+            }   
+        }
+        //给list区域里的li跳转事件
+        function bindLink(){
+         var oLis = oUl.getElementsByTagName("li");
+         for(var i=0;i<oLis.length;i++){
+           oLis[i].onclick=function(e){
+            //  window.location.href = "detail.html"
+            //跳转并传参  借助自定义属性
+            //改一下，改成点击姓名id 分数性别（点击别的相关操作不会跳转不会） 才会跳转到具体信息
+            if(e.target.className =='w100'){
+              window.open("detail.html?id="+this.getAttribute("studentId"))
+            }
+           }
+         }
+        }
+        
+        // function removeCustom(){
+            //事件委托实现删除
+            oUl.onclick = function(e){
+              e=e||window.event;
+              var tar= e.target || e.srcElement;
+              // console.log(e.target)
+              if(tar.innerHTML==="删除"){
+                var stuId=tar.getAttribute("stuId")
+                var flag = window.confirm(`确定要删除编号为${stuId}的客户吗`);
+                if(flag){
+                  ajax({
+                    url:"/removeInfo?id="+stuId,
+                    success:function (result) {                   
+                    console.log(result)
+                    //删除成功刷新页面
+                    window.location.reload()
+                  }
+                  })
+                }
+              }
+            }
+        
+          // }
+
+          //实现批量删除，先获取所有选中的checkbox 对应的id值，组成{ids:'1,2,3'}的形式发送到后台
+          batchDelBtn.onclick = function(){
+            var checkboxs = document.querySelectorAll('input[type=checkbox]');
+            var inputArr = [];
+            checkboxs.forEach(function(item){
+              if(item.checked){
+                inputArr.push(+item.value)
+              }
+            })
+            console.log(inputArr)
+            var idsObj = {
+              ids:inputArr.toString()
+            }
+            // console.log(idsObj)
+            ajax({
+              method: "post",
+              url: "/batchDelete",
+              data: JSON.stringify(idsObj),
+              success: function(result) {
+                console.log(result)
+              if (result && result.code == 0) {
+                window.location.reload();
+                return;
+              }
+              alert(result.msg);
+            }
+            })
+          }
+
+
+        function sendAJAX(){
+          ajax({
+            url: "/getList?n="+n,
+            success: function(result) {
+              if (result && result.code === 0) {
+                data = result["data"];
+                total = result["total"]
+                // console.log(data)
+                bindHTML();
+                bindLink();
+              }
+            }
+          });
+        }
+        //模块的入口   首次向服务器发送请求，把第一页的数据请求过来并渲染
+        function init() {
+          sendAJAX();//异步获取的数据，bindLink不能放这里
+          bindEvent();      
+        }
+        return { init: init };
+      })();
+      pageModule.init();
+    </script>
+  </body>
+</html>

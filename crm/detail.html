@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="./js/jam-ajax.js"></script>
+    <style>
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      #detailInfo {
+        width: 200px;
+        border: 1px dotted rebeccapurple;
+        height: 200px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -100px 0 0 -100px;
+        box-sizing: border-box;
+      }
+      #detailInfo li {
+        height: 50px;
+        line-height: 50px;
+        list-style: none;
+      }
+      #detailInfo li span {
+        float: left;
+        margin-left:20px; 
+      }
+      #detailInfo li:nth-child(even) {
+        background: rgb(230, 219, 219);
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="detailInfo">
+      
+    </ul>
+    <script>
+      //有了id 发送请求获取数据 渲染页面
+     var oUl=document.getElementById("detailInfo")
+      ajax({
+        url:"/getInfo"+window.location.search,
+        success:function(result){
+          if(result&&result["code"]===0){
+            var data = result["data"];
+            // console.log(data)
+            bindHTML(data)
+          }
+        }
+      })
+    function bindHTML(data){
+      var str = `
+      <li>
+        <span>编号</span>
+        <span>${data["id"]}</span>
+      </li>
+      <li>
+        <span>姓名</span>
+        <span>${data["name"]}</span>
+      </li>
+      <li>
+        <span>性别</span>
+        <span>${data["sex"]}</span>
+      </li>
+      <li>
+        <span>分数</span>
+        <span>${data["score"]}</span>
+      </li>`;
+      oUl.innerHTML = str;
+    }
+    </script>
+  </body>
+</html>

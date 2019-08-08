@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>增加或修改数据的页面</title>
+    <style>
+      .box {
+        border: 3px solid rebeccapurple;
+        width: 500px;
+        margin: 0 auto;
+      }
+      label {
+        display: block;
+      }
+      input {
+        height: 30px;
+        line-height: 30px;
+        margin: 5px auto;
+      }
+      input[type="submit"] {
+        width: 200px;
+        border: none;
+        background: rebeccapurple;
+        color: white;
+      }
+      .form {
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        padding: 20px;
+      }
+      .longinput {
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 关于修改时传递id，方法1：url中拼接，获取；方法2：设置一个hidden的input放置id -->
+    <div class="box">
+      <div class="form">
+        <label for="">姓名：<input type="text" name="name" id="name"/></label>
+        <label for="">性别：<input type="text" name="sex" id="sex"/></label>
+        <label for="">分数：<input type="text" name="score" id="score" class="longinput"/></label>
+        
+        <input type="submit" value="提交" id="submit" />
+      </div>
+    </div>
+    <script src="./js/jam-ajax.js"></script>
+    <script>
+      String.prototype.queryURLParameter = function() {
+        var obj = {},
+          reg = /([^?=&#]+)=([^?=&#]+)/g;
+        this.replace(reg, function() {
+          var key = arguments[1],
+            value = arguments[2];
+          obj[key] = value;
+        });
+        return obj;
+      };
+      var btnSubmit = document.getElementById("submit"),
+        nameInput = document.getElementById("name"),
+        sexInput = document.getElementById("sex"),
+        scoreInput = document.getElementById("score");
+
+      //判断是修改还是要增加,获取当前页面url
+      var urlObj = window.location.href.queryURLParameter(),
+        stuId = urlObj["id"], //   console.log(urlObj)
+        isFlag = typeof stuId === "undefined" ? false : true; //true 修改，isFlag false增加
+      console.log(urlObj)
+        if (isFlag) {
+        //如果是修改，我们需要发送请求获取对应id的数据，并渲染到增加页面上
+        ajax({
+          method: "get",
+          url: "/getInfo?id=" + stuId,
+          success: function(result) {
+            var data = result["data"];
+            nameInput.value = data["name"];
+            sexInput.value = data["sex"];
+            scoreInput.value = data["score"];
+          }
+        });
+      }
+      //修改完毕点击提交
+      btnSubmit.onclick = function() {
+        var obj = {
+          name: nameInput.value,
+          sex: sexInput.value,
+          score: scoreInput.value,
+        };
+
+        
+        if (isFlag) {
+          //true 修改
+          obj.id = stuId;
+          console.log(JSON.stringify(obj))
+          ajax({
+            method: "post",
+            url: "/updateInfo",
+            data: JSON.stringify(obj),
+            success: function(result) {
+                console.log(result)
+              if (result && result.code == 0) {
+                window.location.href = "index1.html";
+                return;
+              }
+              alert(result.msg);
+            }
+          });
+          return;
+        } 
+       
+          ajax({
+            method: "post",
+            url: "/addInfo",
+            data: JSON.stringify(obj),
+            success: function(result) {
+              if (result && result.code == 0) {
+                window.location.href = "paginate.html";
+                return;
+              }
+              alert(result.msg);
+            }
+          });
+        
+      };
+    </script>
+  </body>
+</html>

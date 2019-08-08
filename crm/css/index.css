@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+html,body{
+    width: 100%;
+    color: #000;
+    font-size: 14px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+ul,li{
+    list-style: none;
+    cursor: pointer;
+}
+a,a:hover,a:active,a:target{
+    color: #000;
+    text-decoration: none
+}
+.box{
+    /* width: 800px; */
+    border: 3px solid rebeccapurple;
+    /* text-align: center; */
+    margin: 20px auto;
+    padding: 20px;
+}
+.link{
+    display: inline-block;
+    margin: 5px 0;
+    font-size: 16px;
+}
+.link:hover,.control a:hover{
+    color: rebeccapurple;
+    text-decoration: underline;
+}
+.head{
+    background:rebeccapurple;
+    overflow: hidden;
+    color: white;
+    font-size: 14px;
+}
+.head span,.list li span{
+   float: left;
+   text-align: center;
+}
+.w50{
+    width:50px;
+}
+.w100{
+    width:100px;
+}
+.w150{
+    width:150px;
+}
+.list li,.head{
+    height: 35px;
+    line-height:35px;
+}
+.list li:nth-child(even){
+    background: rgb(230, 219, 219);
+}
+.control a{
+    display: inline-block;
+    margin:0 5px;
+}
